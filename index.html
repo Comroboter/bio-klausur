@@ -1479,6 +1479,7 @@ details.s-sol p{margin:6px 0 4px;font-size:15px}
 .hold .shell,.hold .shell *,.hold .bottombar,.hold .bottombar *,.hold .bfade{animation-play-state:paused!important}
 @keyframes bIn{from{opacity:0;transform:translate3d(-12px,0,0)}to{opacity:1;transform:none}}
 @keyframes bUp{from{opacity:0;transform:translate3d(0,16px,0)}to{opacity:1;transform:none}}
+html.vh{overflow-x:hidden}
 @keyframes bRise{from{transform:translate3d(0,110%,0)}to{transform:none}}
 @keyframes bDrop{from{transform:translate3d(0,-110%,0)}to{transform:none}}
 @keyframes bGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
@@ -2211,7 +2212,7 @@ html.vh:not(.vb){background:#0a0a0d}
       <div class="sx-bar" id="sxbar" aria-hidden="true"></div>
       <ol class="sx-rows" id="sxrows"></ol>
     </section>
-    <!-- Stand: 25.11.2026, 10:58 -->
+    <!-- Stand: 25.11.2026, 11:22 -->
   </div>
 </nav>
 
@@ -3549,7 +3550,7 @@ function introStage(st,cu){INTRO.st=st;INTRO.busy=true;var d=document.documentEl
   /* Leisten kommen danach wie App-Rahmen herein: oben von oben, unten von unten, Seitenleiste von links */
   INTRO.chrome=[];
   function ch(sel,from){var n=document.querySelector(sel);if(!n)return;var r=n.getBoundingClientRect();if(!(r.width>0&&r.height>0&&r.bottom>0&&r.top<H&&r.right>0&&r.left<W))return;
-    n.classList.add("ig-x");var b=getComputedStyle(n).transform;b=b&&b!=="none"?b:"";var o={n:n,a:(b?b+" ":"")+from,z:b||"translate3d(0,0,0)"};
+    n.classList.add("ig-x");n.style.animation="none";var b=getComputedStyle(n).transform;b=b&&b!=="none"?b:"";var o={n:n,a:(b?b+" ":"")+from,z:b||"translate3d(0,0,0)"};
     n.style.willChange="transform,opacity";n.style.opacity=".001";n.style.transform=o.a;INTRO.chrome.push(o)}
   ch(".topbar","translate3d(0,-100%,0)");ch(".bottombar","translate3d(0,100%,0)");ch(".path","translate3d(-32px,0,0)");ch(".bfade","translate3d(0,0,0)");
   if(thr){thr.classList.add("ig-thr");thr.style.willChange="transform,opacity";thr.style.opacity=".001";INTRO.thr=thr;INTRO.tr=tr;try{INTRO.snk=introSnakePrep(thr,tr)}catch(e){INTRO.snk=null}}
@@ -3692,7 +3693,7 @@ function introPlan(vh){
       "armed "+armed()+"  seit "+(armedAt?fmt(now-armedAt):"-")+"  pull "+(typeof pull==="number"?pull.toFixed(2):pull)+"  ready "+pullReady,
       "busy "+peekBusy+"  touch "+touching+"  FX "+(FX&&FX.on)+" "+fmt(FX&&FX.ex||0)+"  flung "+flung+"  back "+backing,
       "run h "+(r?r.offsetHeight:"-")+"  mt "+(r?r.style.marginTop||"0":"-")+"  sheet "+(sh?fmt(sh.getBoundingClientRect().top):"-")+" "+(sh&&sh.style.transform||""),
-      "user "+fmt(now-lastUser)+"  bounce "+fmt(Math.max(0,bounceUntil-now))+"  cur "+cur,(function(){var v=[].slice.call(document.querySelectorAll(".station.on svg")).filter(function(s){return s.querySelector("animate,animateTransform,animateMotion,set")});return "smil "+v.length+"  io "+v.filter(function(s){return s._io}).length+"  pausiert "+v.filter(function(s){try{return s.animationsPaused()}catch(e){return false}}).length+"  t "+(v[0]&&v[0].getCurrentTime?v[0].getCurrentTime().toFixed(1):"-")+"  SCRL "+window.SCRL})(),"Fehler: "+(ERRS.length?ERRS.join(" | "):"keine"),navigator.userAgent.replace(/.*(Version\/[\d.]+|Chrome\/[\d.]+|CriOS\/[\d.]+).*/,"$1"),"rand: apple "+(IS_WK?"ja":"nein")+"  erreicht "+EGN.r+"  licht "+EGN.l+"  abprall "+EGN.b+"  touch "+(typeof touchUI!=="undefined"?touchUI:"?")].join("\n")}catch(e){box.textContent="Fehler: "+e.message}}
+      "user "+fmt(now-lastUser)+"  bounce "+fmt(Math.max(0,bounceUntil-now))+"  cur "+cur,(function(){var v=[].slice.call(document.querySelectorAll(".station.on svg")).filter(function(s){return s.querySelector("animate,animateTransform,animateMotion,set")});return "smil "+v.length+"  io "+v.filter(function(s){return s._io}).length+"  pausiert "+v.filter(function(s){try{return s.animationsPaused()}catch(e){return false}}).length+"  t "+(v[0]&&v[0].getCurrentTime?v[0].getCurrentTime().toFixed(1):"-")+"  SCRL "+window.SCRL})(),"Fehler: "+(ERRS.length?ERRS.join(" | "):"keine"),navigator.userAgent.replace(/.*(Version\/[\d.]+|Chrome\/[\d.]+|CriOS\/[\d.]+).*/,"$1"),(function(){try{var vv=window.visualViewport,p=document.createElement("i");p.style.cssText="position:fixed;bottom:0;height:env(safe-area-inset-bottom,0px);width:1px;visibility:hidden";document.body.appendChild(p);var sab=p.offsetHeight;p.remove();var bb=document.querySelector(".bottombar"),r=bb?bb.getBoundingClientRect():{bottom:-1};var sa=!!(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);return "vp: iH "+innerHeight+"  cH "+document.documentElement.clientHeight+"  vvH "+(vv?Math.round(vv.height)+"/"+Math.round(vv.offsetTop):"-")+"  sab "+sab+"  vvb "+(bb?bb.style.getPropertyValue("--vvb")||"-":"-")+"  bar "+Math.round(r.bottom)+"  scr "+screen.height+"/"+screen.availHeight+"  "+(sa?"app":"tab")}catch(e){return "vp: "+e}})(),"rand: apple "+(IS_WK?"ja":"nein")+"  erreicht "+EGN.r+"  licht "+EGN.l+"  abprall "+EGN.b+"  touch "+(typeof touchUI!=="undefined"?touchUI:"?")].join("\n")}catch(e){box.textContent="Fehler: "+e.message}}
   tt.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("button,a"))return;var t=performance.now();if(t-t0>700)n=0;t0=t;n++;if(n<5)return;n=0;
     if(box){box.remove();box=null;clearInterval(iv);return}
     box=document.createElement("pre");box.style.cssText="position:fixed;left:8px;right:8px;top:30%;z-index:200;margin:0;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.82);color:#9fe4d0;font:12px/1.45 ui-monospace,monospace;white-space:pre-wrap;pointer-events:none";
