@@ -2197,7 +2197,7 @@ html.vh:not(.vb){background:#0a0a0d}
       <div class="sx-bar" id="sxbar" aria-hidden="true"></div>
       <ol class="sx-rows" id="sxrows"></ol>
     </section>
-    <!-- Stand: 25.11.2026, 00:30 -->
+    <!-- Stand: 25.11.2026, 10:04 -->
   </div>
 </nav>
 
@@ -3094,7 +3094,7 @@ function peekTo(t,inflow){if(peekBusy)return;peekBusy=true;updateNav(t);moreEl.c
   var _dpr=window.devicePixelRatio||1,dy=Math.round((-OV-top0)*_dpr)/_dpr,dist=Math.abs(dy),dur=Math.round(380+240*Math.min(1,dist/H));var _vm=relV!=null&&!ov;if(_vm){var _r=Math.max(.6,Math.min(6,relV*dur/Math.max(1,dist)));ez=_r>3.33?"cubic-bezier("+(1/_r).toFixed(3)+",1,.36,1)":"cubic-bezier(.3,"+(.3*_r).toFixed(3)+",.36,1)"}relV=null;if(!_vm&&!ov&&!RM)ez="cubic-bezier(.2,1.07,.3,1)";
   var kc0=inner.querySelector(".kicker"),crun=inner.querySelector(".runway");if(crun&&kc0){crun.style.marginTop="";var need=H-padB()-(crun.getBoundingClientRect().top-kc0.getBoundingClientRect().top+Kref);if(need>0){crun.style.marginTop=need+"px";crun.style.setProperty("--rw-up",Math.max(0,need-14)+"px")}}
   var kc=inner.querySelector(".kicker"),ck0=kc?kc.getBoundingClientRect().top:0,ty0=ov?0:tyOf(inner),L=Kref-ck0-dy,_ts=ov?0:tyOf(sheet);
-  inner.classList.add("go");var tStart=performance.now(),c0=cur;var _hold=[],_hsv=[],_scrl=window.SCRL;window.SCRL=true;try{document.getAnimations().forEach(function(x){if(x.playState==="running"){x.pause();_hold.push(x)}});document.querySelectorAll("svg").forEach(function(v){try{if(v.querySelector("animate,animateMotion,animateTransform")&&!v.animationsPaused()){v.pauseAnimations();_hsv.push(v)}}catch(_){}})}catch(_){}function _resume(){window.SCRL=_scrl||false;_hold.forEach(function(x){try{if(x.playState==="paused")x.play()}catch(_){}});_hsv.forEach(function(v){try{if(v.isConnected&&v._io!==false&&!(v.closest(".station")&&!v.closest(".station.on")))v.unpauseAnimations()}catch(_){}});_hold=[];_hsv=[]}
+  inner.classList.add("go");var tStart=performance.now(),c0=cur;var _hold=[],_hsv=[],_scrl=window.SCRL;window.SCRL=true;try{document.getAnimations().forEach(function(x){if(x.playState==="running"){x.pause();_hold.push(x)}});document.querySelectorAll("svg").forEach(function(v){try{if(v.querySelector("animate,animateMotion,animateTransform")&&!v.animationsPaused()){v.pauseAnimations();_hsv.push(v)}}catch(_){}})}catch(_){}function _resume(){window.SCRL=_scrl||false;try{setTimeout(smilSync,80)}catch(_){}_hold.forEach(function(x){try{if(x.playState==="paused")x.play()}catch(_){}});_hsv.forEach(function(v){try{if(v.isConnected&&v._io!==false&&!(v.closest(".station")&&!v.closest(".station.on")))v.unpauseAnimations()}catch(_){}});_hold=[];_hsv=[]}
   try{if(cur===0&&t>0)tbSnake(t)}catch(_){}try{if(t>0&&!document.documentElement.classList.contains("st0"))tbSet(t/N,dur,ez.indexOf("1.07")>0?"cubic-bezier(.22,1,.36,1)":ez)}catch(_){}
   try{outReset();var _os=stations[cur],_lim=ov?H:top0,_cand=[],_c0=cur;if(_os&&!RM)requestAnimationFrame(function(){if(cur!==_c0||!peekBusy)return;var _hh=_os.querySelector(":scope > .hero");if(_hh)_cand.push(_hh);[].forEach.call(_os.querySelectorAll(":scope > .content > *"),function(n){if(!n.classList.contains("runway"))_cand.push(n)});_cand.forEach(function(n){if(OUTA.length>=5)return;var r=n.getBoundingClientRect();if(!(r.height>0&&r.bottom>0&&r.top<_lim))return;n.style.transformOrigin=(innerWidth/2-r.left).toFixed(1)+"px "+(H*.18-r.top).toFixed(1)+"px";OUTA.push(n.animate([{transform:"translate3d(0,0,0) scale(1)",opacity:1},{transform:"translate3d(0,-28px,0) scale(.93)",opacity:.38}],{duration:dur,easing:ez.indexOf("1.07")>0?"cubic-bezier(.22,1,.36,1)":ez,fill:"forwards"}))})})}catch(_){}
   anims.push(sheet.animate([{transform:"translate3d(0,"+(ov?H:_ts)+"px,0)"},{transform:"translate3d(0,"+(ov?-OV:_ts+dy)+"px,0)"}],{duration:dur,easing:ez,fill:"forwards"}));
@@ -3164,7 +3164,7 @@ function onScrollPull(){if(peekBusy||cur<0)return;edgeBounce(performance.now());
   if(!(FX&&FX.on&&FX.ex>0))setPull(armed()&&over>0?over/PEEK_TH:0);if(!touching&&pullReady&&now-tEndAt<1200&&scrollY>lastSY0)touchGo(Math.max(0,(scrollY-lastSY0)/Math.max(8,now-lastT0)));lastSY0=scrollY;lastT0=now}
 var lastSY0=0,lastT0=0;
 function onIdle(){if(performance.now()<bounceUntil){clearTimeout(idleT);idleT=setTimeout(onIdle,bounceUntil-performance.now()+20);return}if(peekBusy||cur<0||!curRun()||touching)return;try{wcIdle();wcZone()}catch(e){}var r=restY(),over=scrollY-r;if(Math.abs(over)<=4)cacheRest();if(scrollY<=4&&cur>0)warmSt(cur-1);
-  if(!armed()){if(Math.abs(over)<=4){arm();flung=false}return}
+  if(!armed()){if(Math.abs(over)<=4||(over<0&&over>-80&&scrollY>=document.documentElement.scrollHeight-innerHeight-2)){arm();flung=false}return}
   if(over<=4){flung=false;return}
   if(pullReady&&!flung&&!backing&&performance.now()-lastUser<1500&&performance.now()-shownAt>900&&armOld()){crossSw()}else{flung=false;backToRest()}}
 /* Nur echtes Scrollen darf die Schwelle überqueren, nicht etwa eine Seite, die kürzer wird */
@@ -3224,6 +3224,13 @@ document.getElementById("resetpath").addEventListener("click",function(){visited
 
 if(DESK.addEventListener)DESK.addEventListener("change",function(){closeSheet();placeEpo();placeGen()});
 
+/* Fehler fürs Fehlersuche-Feld mitschreiben (fünfmal auf die Kopfleiste tippen) */
+var ERRS=[];window.addEventListener("error",function(e){try{ERRS.push((e.message||"Fehler")+" @"+(e.lineno||"?"));if(ERRS.length>4)ERRS.shift()}catch(_){}});
+/* Zeichnungen (SMIL) der sichtbaren Seite wieder anwerfen, wenn sie laut IntersectionObserver laufen sollen (v._io) und
+   gerade nicht gescrollt oder gewechselt wird. Sicherheitsnetz: Mehrere Stellen halten sie kurz an (Intro, Scrollen am
+   Touchgerät, Seitenwechsel); ging ein Anwerfen verloren, standen die Bilder oben still (iPad, 25.11.). */
+function smilSync(){if(window.SCRL||peekBusy||document.hidden)return;document.querySelectorAll(".station.on svg").forEach(function(v){try{if(v._io&&v.animationsPaused&&v.animationsPaused())v.unpauseAnimations()}catch(e){}})}
+setInterval(smilSync,1500);
 /* ================= KLARER WEG: Schritte, Startbildschirm, Mini-Quiz, Handy-Navigation =================
    Schritt 0 ist die Übersicht, danach Schritt 1 bis N-1. Erledigt ist ein Schritt, wenn man ihn nach vorn verlässt
    (Weiter-Knopf, Hochwischen, Mausrad) oder das Mini-Quiz beendet. Alles bleibt im Browser gespeichert (bio_done). */
@@ -3539,7 +3546,7 @@ function introStage(st,cu){INTRO.st=st;INTRO.busy=true;var d=document.documentEl
 function introFreeze(cu){var hold=[],sv=[];INTRO.frz={a:hold,s:sv,scrl:window.SCRL};window.SCRL=true;
   try{document.getAnimations().forEach(function(a){var t=a.effect&&a.effect.target;if(a.playState!=="running"||!t||(t.closest&&t.closest(".curtain")))return;a.pause();hold.push(a)})}catch(e){}
   [].forEach.call(document.querySelectorAll("#main svg"),function(v){try{if(v.animationsPaused&&!v.animationsPaused()){v.pauseAnimations();sv.push(v)}}catch(e){}})}
-function introThaw(){var f=INTRO.frz;if(!f)return;INTRO.frz=null;window.SCRL=f.scrl||false;f.a.forEach(function(a){try{if(a.playState==="paused")a.play()}catch(e){}});f.s.forEach(function(v){try{v.unpauseAnimations()}catch(e){}})}
+function introThaw(){var f=INTRO.frz;if(!f)return;INTRO.frz=null;window.SCRL=f.scrl||false;f.a.forEach(function(a){try{if(a.playState==="paused")a.play()}catch(e){}});f.s.forEach(function(v){try{v.unpauseAnimations()}catch(e){}});try{setTimeout(smilSync,60)}catch(e){}}
 function introRestore(){introThaw();INTRO.busy=false;if(INTRO.main){INTRO.main.style.transform="";INTRO.main.style.maxHeight="";INTRO.main.style.overflow="";INTRO.main.style.willChange="";INTRO.main.style.transformOrigin=""}
   (INTRO.chrome||[]).forEach(function(o){o.n.style.opacity="";o.n.style.transform="";o.n.style.willChange=""});
   if(INTRO.thr){INTRO.thr.style.opacity="";INTRO.thr.style.transform="";INTRO.thr.style.willChange=""}introSnakeEnd(INTRO.snk)}
@@ -3666,7 +3673,7 @@ function introPlan(vh){
       "armed "+armed()+"  seit "+(armedAt?fmt(now-armedAt):"-")+"  pull "+(typeof pull==="number"?pull.toFixed(2):pull)+"  ready "+pullReady,
       "busy "+peekBusy+"  touch "+touching+"  FX "+(FX&&FX.on)+" "+fmt(FX&&FX.ex||0)+"  flung "+flung+"  back "+backing,
       "run h "+(r?r.offsetHeight:"-")+"  mt "+(r?r.style.marginTop||"0":"-")+"  sheet "+(sh?fmt(sh.getBoundingClientRect().top):"-")+" "+(sh&&sh.style.transform||""),
-      "user "+fmt(now-lastUser)+"  bounce "+fmt(Math.max(0,bounceUntil-now))+"  cur "+cur].join("\n")}catch(e){box.textContent="Fehler: "+e.message}}
+      "user "+fmt(now-lastUser)+"  bounce "+fmt(Math.max(0,bounceUntil-now))+"  cur "+cur,(function(){var v=[].slice.call(document.querySelectorAll(".station.on svg")).filter(function(s){return s.querySelector("animate,animateTransform,animateMotion,set")});return "smil "+v.length+"  io "+v.filter(function(s){return s._io}).length+"  pausiert "+v.filter(function(s){try{return s.animationsPaused()}catch(e){return false}}).length+"  t "+(v[0]&&v[0].getCurrentTime?v[0].getCurrentTime().toFixed(1):"-")+"  SCRL "+window.SCRL})(),"Fehler: "+(ERRS.length?ERRS.join(" | "):"keine"),navigator.userAgent.replace(/.*(Version\/[\d.]+|Chrome\/[\d.]+|CriOS\/[\d.]+).*/,"$1")].join("\n")}catch(e){box.textContent="Fehler: "+e.message}}
   tt.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("button,a"))return;var t=performance.now();if(t-t0>700)n=0;t0=t;n++;if(n<5)return;n=0;
     if(box){box.remove();box=null;clearInterval(iv);return}
     box=document.createElement("pre");box.style.cssText="position:fixed;left:8px;right:8px;top:30%;z-index:200;margin:0;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.82);color:#9fe4d0;font:12px/1.45 ui-monospace,monospace;white-space:pre-wrap;pointer-events:none";
