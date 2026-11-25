@@ -2076,6 +2076,20 @@ html.tbs #tbfill{opacity:0}
   .bb-in{gap:12px!important}
   #next{padding:0 7px 0 14px!important;gap:9px!important}
 }
+
+/* Licht an der Kante statt Abprall (Safari, #63) */
+.edgeglow{position:fixed;z-index:31;pointer-events:none;opacity:0;will-change:opacity;
+  background:linear-gradient(to bottom,color-mix(in srgb,var(--c) 16%,transparent),color-mix(in srgb,var(--c) 48%,transparent))}
+.edgeglow.bot{background:linear-gradient(to top,color-mix(in srgb,var(--c) 16%,transparent),color-mix(in srgb,var(--c) 48%,transparent))}
+.edgeglow i{position:absolute;left:0;right:0;display:block;will-change:transform}
+.edgeglow .el{height:3px;top:100%;margin-top:-1.5px;border-radius:2px;transform-origin:50% 50%;
+  background:linear-gradient(90deg,transparent,var(--c) 14%,color-mix(in srgb,var(--c) 55%,#fff) 50%,var(--c) 86%,transparent);
+  box-shadow:0 0 14px 2px color-mix(in srgb,var(--c) 80%,transparent)}
+.edgeglow .eh{height:72px;top:100%;transform-origin:50% 0;
+  background:radial-gradient(60% 100% at 50% 0%,color-mix(in srgb,var(--c) 50%,transparent),color-mix(in srgb,var(--c) 14%,transparent) 55%,transparent 80%)}
+.edgeglow.bot .el{top:auto;bottom:100%;margin:0 0 -1.5px}
+.edgeglow.bot .eh{top:auto;bottom:100%;transform-origin:50% 100%;
+  background:radial-gradient(60% 100% at 50% 100%,color-mix(in srgb,var(--c) 50%,transparent),color-mix(in srgb,var(--c) 14%,transparent) 55%,transparent 80%)}
 /* ===== Start-Intro „Zündung“ (gehört zu intro.js): Elemente zünden wie Leuchtröhren, sobald das Dunkel sie freigibt ===== */
 html.ig .ig-el{animation:igOn .56s cubic-bezier(.2,.7,.2,1) var(--igd,0s) both!important;animation-play-state:running!important}
 html.ig-soft .ig-el{animation:igSoft .45s ease-out var(--igd,0s) both!important}
@@ -2197,7 +2211,7 @@ html.vh:not(.vb){background:#0a0a0d}
       <div class="sx-bar" id="sxbar" aria-hidden="true"></div>
       <ol class="sx-rows" id="sxrows"></ol>
     </section>
-    <!-- Stand: 25.11.2026, 10:04 -->
+    <!-- Stand: 25.11.2026, 10:58 -->
   </div>
 </nav>
 
@@ -3156,8 +3170,13 @@ var lastT=0,flung=false;
 var eSV=0,bounceUntil=0,bA=null;
 function wcZone(){var st=stations[cur];if(!st)return;var H=innerHeight,near=touchUI||scrollY<H*1.2||maxScroll()-scrollY<H*1.2;if(near&&!st._wc){st.style.willChange="transform";st._wc=1}return near}
 function wcIdle(){stations.forEach(function(x,k){if(x._wc&&(k!==cur||!wcZone())){x.style.willChange="";x._wc=0}})}
-function edgeBounce(now){if(Math.abs(scrollY-lastSY)>2)wcZone();var dt=Math.max(1,now-lastT),sv=(scrollY-lastSY)/dt,vv=Math.abs(sv)>Math.abs(eSV)?sv:eSV;eSV=dt>120?0:sv;if(!touchUI||touching||RM||now<bounceUntil||peekBusy||Math.abs(vv)<.7)return;var mx=maxScroll();if(mx>40&&scrollY>=mx-1&&lastSY<mx-1&&vv>.7&&!armed())bounce(-1,vv);else if(scrollY<=1&&lastSY>1&&vv<-.7)bounce(1,-vv)}
-var bD=0;function bounce(d,v){var st=stations[cur];if(!st||!st.animate||st.style.transform)return;bD=d;var A=Math.round(Math.min(34,Math.max(10,v*15)));bounceUntil=performance.now()+500;var _bh=[];try{st.getAnimations({subtree:true}).forEach(function(x){if(x.playState==="running"){x.pause();_bh.push(x)}})}catch(e){}setTimeout(function(){_bh.forEach(function(x){try{if(x.playState==="paused")x.play()}catch(e){}});},500);bA=st.animate([{transform:"translate3d(0,0,0)",easing:"cubic-bezier(.12,.85,.3,1)"},{transform:"translate3d(0,"+(d*A)+"px,0)",offset:.3,easing:"cubic-bezier(.45,0,.2,1)"},{transform:"translate3d(0,0,0)"}],{duration:480})}
+function edgeBounce(now){if(Math.abs(scrollY-lastSY)>2&&wcZone()&&(IS_WK||window.__EG_TEST))egPrep();try{var _m=maxScroll();if((scrollY>=_m-1&&lastSY<_m-1)||(scrollY<=1&&lastSY>1))EGN.r++}catch(_){}var dt=Math.max(1,now-lastT),sv=(scrollY-lastSY)/dt,vv=Math.abs(sv)>Math.abs(eSV)?sv:eSV;eSV=dt>120?0:sv;if(!touchUI||touching||RM||now<bounceUntil||peekBusy||Math.abs(vv)<.7)return;var mx=maxScroll();if(mx>40&&scrollY>=mx-1&&lastSY<mx-1&&vv>.7&&!armed())bounce(-1,vv);else if(scrollY<=1&&lastSY>1&&vv<-.7)bounce(1,-vv)}
+var EG=null;var EGE={},EGT=0;function egMk(top){var e=EGE[top?"t":"b"];if(!e){e=document.createElement("div");e.className="edgeglow"+(top?"":" bot");e.innerHTML="<i class=eh></i><i class=el></i>";document.body.appendChild(e);e._L=e.firstChild.nextSibling;e._H=e.firstChild;EGE[top?"t":"b"]=e}return e}
+function egPos(top){var e=egMk(top),bar=document.querySelector(top?".topbar":".bottombar");if(!bar)return e;var r=bar.getBoundingClientRect(),k=[r.left,r.top,r.width,r.height].map(Math.round).join(",");if(e._k!==k){e._k=k;var E=e.style;E.left=Math.round(r.left)+"px";E.top=Math.round(r.top)+"px";E.width=Math.round(r.width)+"px";E.height=Math.round(r.height)+"px";E.borderRadius=getComputedStyle(bar).borderRadius}return e}
+function egPrep(force){var n=performance.now();if(!force&&n-EGT<200)return;EGT=n;try{var st=stations[cur];if(st&&!st._egc)st._egc=getComputedStyle(st).getPropertyValue("--st").trim()||"#ff6a5a";var c=st&&st._egc||"#ff6a5a";[true,false].forEach(function(t){var e=egPos(t);if(e._c!==c){e._c=c;e.style.setProperty("--c",c)}})}catch(e){}}
+function edgeGlow(d,v){try{var top=d>0,e=EGE[top?"t":"b"],st=stations[cur];if(!e||!st||e._c!==st._egc)egPrep(true),e=EGE[top?"t":"b"];var s=Math.max(0,Math.min(1,(v-.7)/3)),k=.38+.62*s,D=Math.round(360+380*s);if(e._a)e._a.forEach(function(a){a.cancel()});e._a=[e.animate([{opacity:k*.82,easing:"linear"},{opacity:k,offset:.06,easing:"cubic-bezier(.25,.55,.35,1)"},{opacity:0}],{duration:D}),e._L.animate([{transform:"scaleX("+(.18+.2*s)+")"},{transform:"scaleX("+(.55+.45*s)+")"}],{duration:Math.round(200+160*s),easing:"cubic-bezier(.12,.9,.3,1)",fill:"forwards"}),e._H.animate([{transform:"scaleY("+(.55+.25*s)+")"},{transform:"scaleY("+(.6+.4*s)+")",offset:.12},{transform:"scaleY("+(.5+.3*s)+")"}],{duration:D,easing:"ease-out"})]}catch(x){}}
+function edgeGlowOld(d,v){try{if(!EG){EG=document.createElement("div");EG.className="edgeglow";EG.innerHTML="<i class=eh></i><i class=el></i>";document.body.appendChild(EG)}var st=stations[cur],c=(st?getComputedStyle(st).getPropertyValue("--st"):"").trim()||"#ff6a5a",top=d>0,bar=document.querySelector(top?".topbar":".bottombar");if(!bar)return;var r=bar.getBoundingClientRect(),cs=getComputedStyle(bar),E=EG.style;E.setProperty("--c",c);EG.classList.toggle("bot",!top);E.left=r.left+"px";E.top=r.top+"px";E.width=r.width+"px";E.height=r.height+"px";E.borderRadius=cs.borderRadius;var k=Math.min(1,.55+v*.2),o={duration:640,easing:"cubic-bezier(.2,.7,.3,1)"};if(EG._a)EG._a.forEach(function(a){a.cancel()});var L=EG.querySelector(".el"),H=EG.querySelector(".eh");EG._a=[EG.animate([{opacity:0},{opacity:k,offset:.16},{opacity:0}],o),L.animate([{transform:"scaleX(.12)"},{transform:"scaleX(1)"}],{duration:340,easing:"cubic-bezier(.16,.84,.3,1)"}),H.animate([{transform:"scaleY(.3)"},{transform:"scaleY(1)",offset:.2},{transform:"scaleY(.8)"}],o)]}catch(e){}}
+var EGN={l:0,b:0,r:0},bD=0,IS_WK=/Apple/.test(navigator.vendor||"")||/iP(hone|ad|od)/.test(navigator.userAgent+(navigator.platform||""))||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);function bounce(d,v){if(IS_WK||window.__EG_TEST){EGN.l++;edgeGlow(d,v);bD=d;bounceUntil=performance.now()+80;return}var st=stations[cur];if(!st||!st.animate||st.style.transform)return;bD=d;EGN.b++;var A=Math.round(Math.min(34,Math.max(10,v*15)));bounceUntil=performance.now()+(IS_WK?580:500);var _bh=[];if(!IS_WK)try{st.getAnimations({subtree:true}).forEach(function(x){if(x.playState==="running"){x.pause();_bh.push(x)}})}catch(e){}setTimeout(function(){_bh.forEach(function(x){try{if(x.playState==="paused")x.play()}catch(e){}});},500);bA=st.animate([{transform:"translate3d(0,0,0)",easing:"cubic-bezier(.25,.75,.4,1)"},{transform:"translate3d(0,"+(d*A)+"px,0)",offset:.28,easing:"cubic-bezier(.4,0,.25,1)"},{transform:"translate3d(0,0,0)"}],{duration:IS_WK?560:480})}
 function onScrollPull(){if(peekBusy||cur<0)return;edgeBounce(performance.now());if(!curRun()){lastSY=scrollY;lastT=performance.now();return}var r=restY(),over=scrollY-r,prev=lastSY-r,now=performance.now(),v=Math.abs(scrollY-lastSY)/Math.max(1,now-lastT);lastSY=scrollY;lastT=now;
   if(armed()&&over<-(padB()+20))disarm();
   if(over>0&&prev<=0&&v>3.2)flung=true;
@@ -3673,7 +3692,7 @@ function introPlan(vh){
       "armed "+armed()+"  seit "+(armedAt?fmt(now-armedAt):"-")+"  pull "+(typeof pull==="number"?pull.toFixed(2):pull)+"  ready "+pullReady,
       "busy "+peekBusy+"  touch "+touching+"  FX "+(FX&&FX.on)+" "+fmt(FX&&FX.ex||0)+"  flung "+flung+"  back "+backing,
       "run h "+(r?r.offsetHeight:"-")+"  mt "+(r?r.style.marginTop||"0":"-")+"  sheet "+(sh?fmt(sh.getBoundingClientRect().top):"-")+" "+(sh&&sh.style.transform||""),
-      "user "+fmt(now-lastUser)+"  bounce "+fmt(Math.max(0,bounceUntil-now))+"  cur "+cur,(function(){var v=[].slice.call(document.querySelectorAll(".station.on svg")).filter(function(s){return s.querySelector("animate,animateTransform,animateMotion,set")});return "smil "+v.length+"  io "+v.filter(function(s){return s._io}).length+"  pausiert "+v.filter(function(s){try{return s.animationsPaused()}catch(e){return false}}).length+"  t "+(v[0]&&v[0].getCurrentTime?v[0].getCurrentTime().toFixed(1):"-")+"  SCRL "+window.SCRL})(),"Fehler: "+(ERRS.length?ERRS.join(" | "):"keine"),navigator.userAgent.replace(/.*(Version\/[\d.]+|Chrome\/[\d.]+|CriOS\/[\d.]+).*/,"$1")].join("\n")}catch(e){box.textContent="Fehler: "+e.message}}
+      "user "+fmt(now-lastUser)+"  bounce "+fmt(Math.max(0,bounceUntil-now))+"  cur "+cur,(function(){var v=[].slice.call(document.querySelectorAll(".station.on svg")).filter(function(s){return s.querySelector("animate,animateTransform,animateMotion,set")});return "smil "+v.length+"  io "+v.filter(function(s){return s._io}).length+"  pausiert "+v.filter(function(s){try{return s.animationsPaused()}catch(e){return false}}).length+"  t "+(v[0]&&v[0].getCurrentTime?v[0].getCurrentTime().toFixed(1):"-")+"  SCRL "+window.SCRL})(),"Fehler: "+(ERRS.length?ERRS.join(" | "):"keine"),navigator.userAgent.replace(/.*(Version\/[\d.]+|Chrome\/[\d.]+|CriOS\/[\d.]+).*/,"$1"),"rand: apple "+(IS_WK?"ja":"nein")+"  erreicht "+EGN.r+"  licht "+EGN.l+"  abprall "+EGN.b+"  touch "+(typeof touchUI!=="undefined"?touchUI:"?")].join("\n")}catch(e){box.textContent="Fehler: "+e.message}}
   tt.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("button,a"))return;var t=performance.now();if(t-t0>700)n=0;t0=t;n++;if(n<5)return;n=0;
     if(box){box.remove();box=null;clearInterval(iv);return}
     box=document.createElement("pre");box.style.cssText="position:fixed;left:8px;right:8px;top:30%;z-index:200;margin:0;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.82);color:#9fe4d0;font:12px/1.45 ui-monospace,monospace;white-space:pre-wrap;pointer-events:none";
